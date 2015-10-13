@@ -4,11 +4,11 @@ from setuptools import setup
 
 setup(
     name="django-ldapdb",
-    version="0.4.0",
+    version="0.4.0-hotfix",
     description=u"An LDAP database backend for Django",
     long_description=open('README.md').read(),
-    url="https://github.com/jlaine/django-ldapdb",
-    author="Jeremy Laine",
+    url="https://github.com/mattrick/django-ldapdb",
+    author="Kacper Banasik",
     author_email="jeremy.laine@m4x.org",
     packages=['ldapdb', 'ldapdb.backends', 'ldapdb.backends.ldap', 'ldapdb.models'],
     classifiers=[
