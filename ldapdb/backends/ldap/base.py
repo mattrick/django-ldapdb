@@ -122,20 +122,23 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
         #options = self.settings_dict.get('CONNECTION_OPTIONS', {})
         #    for opt, value in options.items():
-         #       self.connection.set_option(opt, value)
+        #       self.connection.set_option(opt, value)
 
     def close(self):
         if hasattr(self, 'validate_thread_sharing'):
             # django >= 1.4
             self.validate_thread_sharing()
-        if self.connection is not None:
-            self.connection.unbind_s()
-            self.connection = None
+
+        self.connectionManager.purge(bind=self.settings_dict['USER'])
+
+    @property
+    def connection(self):
+        with self.connectionManager.connection() as conn:
+            return conn
 
     def ensure_connection(self):
-        if self.connection is None:
-            with self.connectionManager.connection() as conn:
-                self.connection = conn
+        # not used anymore since connection is property
+        pass
 
     def _commit(self):
         pass
