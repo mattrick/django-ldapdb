@@ -30,6 +30,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+import dbapi2 as Database
 import ldap
 import django
 
@@ -100,6 +101,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         'istartswith': 'LIKE %s',
         'iendswith': 'LIKE %s',
     }
+
+    Database = Database
 
     def __init__(self, *args, **kwargs):
         super(DatabaseWrapper, self).__init__(*args, **kwargs)
