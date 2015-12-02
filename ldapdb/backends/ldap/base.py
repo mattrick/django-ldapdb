@@ -65,6 +65,30 @@ class DatabaseCursor(object):
     def __init__(self, ldap_connection):
         self.connection = ldap_connection
 
+    def execute(self, query, args=None):
+        pass
+
+    def executemany(self, query, args):
+        pass
+
+    def fetchone(self):
+        pass
+
+    def fetchmany(self):
+        pass
+
+    def fetchall(self):
+        pass
+
+    def close(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
+
 
 class DatabaseFeatures(BaseDatabaseFeatures):
     def __init__(self, connection):
