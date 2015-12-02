@@ -134,7 +134,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def ensure_connection(self):
         if self.connection is None:
-            self.connection = self.connectionManager.connection()
+            with self.connectionManager.connection() as conn:
+                self.connection = conn
 
     def _commit(self):
         pass
