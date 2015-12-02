@@ -31,6 +31,7 @@
 #
 
 from ldappool import ConnectionManager
+import dbapi2 as Database
 import django
 
 if django.VERSION < (1, 8):
@@ -102,6 +103,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         'iendswith': 'LIKE %s',
     }
 
+    Database = Database
+
     def __init__(self, *args, **kwargs):
         super(DatabaseWrapper, self).__init__(*args, **kwargs)
 
@@ -138,8 +141,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     @connection.setter
     def connection(self, value):
-        if value is None:
-            self.connectionManager.purge(bind=self.settings_dict['USER'])
+        pass
 
     def ensure_connection(self):
         # not used anymore since connection is property
