@@ -136,6 +136,11 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         with self.connectionManager.connection() as conn:
             return conn
 
+    @connection.setter
+    def connection(self, value):
+        if value is None:
+            self.connectionManager.purge(bind=self.settings_dict['USER'])
+
     def ensure_connection(self):
         # not used anymore since connection is property
         pass
