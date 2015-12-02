@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="django-ldapdb",
-    version="0.4.0-hotfix",
+    version="0.4.1",
     description=u"An LDAP database backend for Django",
     long_description=open('README.md').read(),
     url="https://github.com/mattrick/django-ldapdb",
@@ -26,6 +26,7 @@ setup(
     install_requires=[
         'django>=1.2',
         'python-ldap>=2.0',
+        'ldappool>=1.0'
     ],
     setup_requires=[
         'setuptools>=0.6c11',

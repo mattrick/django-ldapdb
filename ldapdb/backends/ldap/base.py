@@ -30,8 +30,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import ldap
-from ldap.ldapobject import ReconnectLDAPObject
+from ldappool import ConnectionManager
 import django
 
 if django.VERSION < (1, 8):
@@ -43,6 +42,7 @@ else:
     from django.db.backends.base.operations import BaseDatabaseOperations
     from django.db.backends.base.base import BaseDatabaseWrapper
     from django.db.backends.base.creation import BaseDatabaseCreation
+
 
 class DatabaseCreation(BaseDatabaseCreation):
     def create_test_db(self, *args, **kwargs):
@@ -115,6 +115,15 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.settings_dict['SUPPORTS_TRANSACTIONS'] = True
         self.autocommit = True
 
+        self.connectionManager = ConnectionManager(uri=self.settings_dict['NAME'],
+                                                   bind=self.settings_dict['USER'],
+                                                   passwd=self.settings_dict['PASSWORD'],
+                                                   use_tls=self.settings_dict.get('TLS', False))
+
+        #options = self.settings_dict.get('CONNECTION_OPTIONS', {})
+        #    for opt, value in options.items():
+         #       self.connection.set_option(opt, value)
+
     def close(self):
         if hasattr(self, 'validate_thread_sharing'):
             # django >= 1.4
@@ -125,19 +134,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def ensure_connection(self):
         if self.connection is None:
-            #self.connection = ldap.initialize(self.settings_dict['NAME'])
-            self.connection = ReconnectLDAPObject(self.settings_dict['NAME'])
-
-            options = self.settings_dict.get('CONNECTION_OPTIONS', {})
-            for opt, value in options.items():
-                self.connection.set_option(opt, value)
-
-            if self.settings_dict.get('TLS', False):
-                self.connection.start_tls_s()
-
-            self.connection.simple_bind_s(
-                self.settings_dict['USER'],
-                self.settings_dict['PASSWORD'])
+            self.connection = self.connectionManager.connection()
 
     def _commit(self):
         pass
