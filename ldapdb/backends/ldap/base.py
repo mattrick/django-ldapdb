@@ -30,7 +30,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from ldappool import ConnectionManager
+from ldappool import ConnectionManager, StateConnector
 import dbapi2 as Database
 import django
 
@@ -145,7 +145,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.connectionManager = ConnectionManager(uri=self.settings_dict['NAME'],
                                                    bind=self.settings_dict['USER'],
                                                    passwd=self.settings_dict['PASSWORD'],
-                                                   use_tls=self.settings_dict.get('TLS', False))
+                                                   use_tls=self.settings_dict.get('TLS', False),
+                                                   connector_cls=self.settings_dict.get('CONNECTOR_CLS', StateConnector))
 
         #options = self.settings_dict.get('CONNECTION_OPTIONS', {})
         #    for opt, value in options.items():
