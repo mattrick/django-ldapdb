@@ -44,6 +44,7 @@ else:
     from django.db.backends.base.base import BaseDatabaseWrapper
     from django.db.backends.base.creation import BaseDatabaseCreation
 
+
 class DatabaseCreation(BaseDatabaseCreation):
     def create_test_db(self, *args, **kwargs):
         """
@@ -63,6 +64,9 @@ class DatabaseCreation(BaseDatabaseCreation):
 class DatabaseCursor(object):
     def __init__(self, ldap_connection):
         self.connection = ldap_connection
+
+    def close(self):
+        self.connection = None
 
 
 class DatabaseFeatures(BaseDatabaseFeatures):
